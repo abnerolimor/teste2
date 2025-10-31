@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Teste de Conexão com Spring Boot (ngrok)</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+        #resultado { margin-top: 20px; padding: 10px; border: 1px solid #ccc; background-color: #f9f9f9; }
+        .success { color: green; font-weight: bold; }
+        .error { color: red; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>Teste de Backend com Spring Boot e ngrok</h1>
+    <p>Página de teste que chama a API através do ngrok.</p>
+    <button onclick="chamarBackend()">Chamar Backend</button>
+    
+    <div id="resultado">Aguardando chamada...</div>
+
+    <script>
+        function chamarBackend() {
+            // A URL DO NGROK (SUA URL EXATA)
+            const ngrokUrl = 'https://nonthermally-stackless-candis.ngrok-free.dev';
+            const endpoint = ngrokUrl + '/api/hello'; // O endpoint que vamos criar no Spring Boot
+
+            document.getElementById('resultado').innerHTML = 'Chamando API em ' + endpoint + '...';
+
+            fetch(endpoint)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erro na resposta do servidor: ' + response.status);
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    document.getElementById('resultado').innerHTML = 
+                        '<span class="success">Sucesso! Resposta do Backend:</span><br>' + data;
+                })
+                .catch(error => {
+                    document.getElementById('resultado').innerHTML = 
+                        '<span class="error">Erro ao conectar:</span><br>' + error.message + 
+                        '<br>Verifique se o ngrok e o Spring Boot estão rodando, e se o CORS está configurado.';
+                });
+        }
+    </script>
+</body>
+</html>
